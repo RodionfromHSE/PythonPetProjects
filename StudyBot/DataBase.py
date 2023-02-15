@@ -2,38 +2,40 @@ import sqlite3 as sq
 from Data import *
 import sys
 
-DB_NAME = r"C:\Users\home\Desktop\Programming\Python Project\Projects\StudyBot\leitner_base.db"
+DB_NAME = r"C:\Users\home\Desktop\Programming\Python Project\PythonPetProjects\StudyBot\leitner_base.db"
+
 
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + dt.timedelta(n)
 
+
 class Database:
     def __init__(self, DBName=DB_NAME):
-        self.__con = sq.connect(DBName, check_same_thread=False)
-        self.__cursor = self.__con.cursor()
+        self._con = sq.connect(DBName, check_same_thread=False)
+        self._cursor = self._con.cursor()
         self.createLevelsIfNeeded()
 
     def createLevelsIfNeeded(self):
         # Can we create table of class that we have?
         for i in range(INFO['LEVELS_AMOUNT']):
-            self.__cursor.execute(f"""CREATE TABLE IF NOT EXISTS level{i}(objName text, link text, date text)""")
+            self._cursor.execute(f"""CREATE TABLE IF NOT EXISTS level{i}(objName text, link text, date text)""")
 
     def addObject(self, object, level):
-        self.__cursor.execute(
+        self._cursor.execute(
             f"""INSERT INTO level{level} VALUES('{object.name}', '{object.link}', '{object.repDate}')""")
 
     def deleteByName(self, name, level):
-        self.__cursor.execute(f"DELETE FROM level{level} WHERE objName=(?)", (name,))
+        self._cursor.execute(f"DELETE FROM level{level} WHERE objName=(?)", (name,))
 
     def getObjectsByDateAndLevel(self, date, level):
-        self.__cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
-        return [Object.fromTuple(triple) for triple in self.__cursor.fetchall()]
+        self._cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
+        return [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
 
     def extractObjectsByDateAndLevel(self, date, level):
-        self.__cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
-        objs = [Object.fromTuple(triple) for triple in self.__cursor.fetchall()]
-        self.__cursor.execute(f"DELETE FROM level{level} WHERE date=(?)", (date,))
+        self._cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
+        objs = [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
+        self._cursor.execute(f"DELETE FROM level{level} WHERE date=(?)", (date,))
         return objs
 
     def getObjectsByDate(self, date):
@@ -57,15 +59,15 @@ class Database:
             self.makeShifts(day)
 
     def getAllObjectsOnLevel(self, level):
-        self.__cursor.execute(f"""SELECT * FROM level{level}""")
-        return [Object.fromTuple(triple) for triple in self.__cursor.fetchall()]
+        self._cursor.execute(f"""SELECT * FROM level{level}""")
+        return [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
 
     def saveChanges(self):
-        self.__con.commit()
+        self._con.commit()
 
     def __del__(self):
         self.saveChanges()
-        self.__cursor.close()
+        self._cursor.close()
 
 
 def DBfromInput():
