@@ -16,6 +16,8 @@ class MyTranslator:
         self.dest = dest
 
     def translate(self, text):
+        if not text.strip():
+            raise RuntimeError("Empty String in translator")
         return self.translator.translate(text, src=self.src, dest=self.dest).text
 
     def translate_list(self, words):
