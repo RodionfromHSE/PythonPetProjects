@@ -7,7 +7,8 @@ import datetime as dt
 from Data import INFO
 from json import load
 
-with open("credentials.json", "r") as f:
+credentials_path = r"C:\Users\home\Desktop\Programming\Python Project\PythonPetProjects\StudyBot\credentials.json"
+with open(credentials_path, "r") as f:
     API_KEY = load(f)['API_KEY']
 bot = telebot.TeleBot(API_KEY)
 db = Database()
@@ -30,6 +31,11 @@ item1 + item2 + item3...
 /getToday - get what to repeat today 
 
 /makeShifts - shift all that you need to repeat today as you've repeated it
+
+/temp - template
+
+/makeShiftsFrom
+12.10
 """)
 
 
@@ -106,7 +112,7 @@ def view(message):
 
 
 @bot.message_handler(commands=['temp'])
-def close(message):
+def temp(message):
     bot.reply_to(message, """En:    
 
 Deutsch:   
@@ -128,6 +134,9 @@ SQL:
 MS:     
 
 AC:
+
+Ch:
+
 """)
 
 
