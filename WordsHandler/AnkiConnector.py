@@ -1,12 +1,18 @@
 import json
 import requests
+from warnings import warn
 
 
 class AnkiConnector:
     def __init__(self, url="http://localhost:8765", version=6):
         self.url = url
         self.version = version
-        self.check_server()
+        try:
+            self.check_server()
+        except Exception:
+            # TODO: Make error output less verbose
+            raise RuntimeError("Can't connect to Anki. Maybe you forgot to open Anki or to download the needed "
+                               "extension?")
 
     def check_server(self):
         headers = {"Content-Type": "application/json"}
@@ -75,4 +81,9 @@ class AnkiConnector:
 if __name__ == '__main__':
     anki = AnkiConnector()
     anki.create_deck("German")
-    anki.add_flashcard("German", 'Yes', 'Done')
+    try:
+        anki.add_flashcard("German", 'Yes', 'Done')
+        anki.add_flashcard("German", 'Yes', 'Done')
+    except Exception as e:
+        if str(e).strip() == "cannot create note because it is a duplicate":
+            warn(f"Card duplicate")

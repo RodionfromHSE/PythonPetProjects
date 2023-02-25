@@ -26,9 +26,11 @@ class MyTranslator:
         for word in words:
             if cnt % self.stop_count == 0:
                 time.sleep(random.randint(*self.time_range))
-            trans[word] = self.translate(word)
+            try:
+                trans[word] = self.translate(word)
+            except Exception:
+                # TODO: add to missing words
+                continue
             print(word, "->", trans[word])
             cnt += 1
         return trans
-
-

@@ -1,9 +1,11 @@
 import json
 import os
+from warnings import warn
 
 from Extractor import Extractor
 from MyTranslator import MyTranslator
 from AnkiConnector import AnkiConnector
+
 
 
 class GlobalHandler:
@@ -41,7 +43,14 @@ class GlobalHandler:
             translations = self.translator.translate_list(words)
 
             for word, translation in translations.items():
-                self.connector.add_flashcard(deck_label, word, translation)
-                self.connector.add_flashcard(deck_label, translation, word)
+                try:
+                    self.connector.add_flashcard(deck_label, word, translation)
+                    self.connector.add_flashcard(deck_label, translation, word)
+                except Exception as e:
+                    if str(e).strip() == "cannot create note because it is a duplicate":
+                        warn(f"Card duplicate {word}|{translation}")
+                        continue
+                    else:
+                        raise e
                 print(f"Added word '{word}' with translation '{translation}' to deck '{deck_label}'")
             open(filename, 'w').close()  # Clear file
