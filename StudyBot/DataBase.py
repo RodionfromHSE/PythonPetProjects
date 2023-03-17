@@ -2,7 +2,7 @@ import sqlite3 as sq
 from Data import *
 import sys
 
-DB_NAME = r"C:\Users\home\Desktop\Programming\Python Project\PythonPetProjects\StudyBot\leitner_base.db"
+DB_NAME = r"/home/rodion/Desktop/Programming/Python/PythonPetProjects/StudyBot/leitner_base.db"
 
 
 def daterange(start_date, end_date):

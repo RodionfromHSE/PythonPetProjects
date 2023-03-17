@@ -1,4 +1,3 @@
-import telebot
 import sys
 
 from Data import Object
@@ -7,10 +6,6 @@ import datetime as dt
 from Data import INFO
 from json import load
 
-credentials_path = r"C:\Users\home\Desktop\Programming\Python Project\PythonPetProjects\StudyBot\credentials.json"
-with open(credentials_path, "r") as f:
-    API_KEY = load(f)['API_KEY']
-bot = telebot.TeleBot(API_KEY)
 db = Database()
 
 
