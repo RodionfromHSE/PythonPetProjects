@@ -9,27 +9,19 @@ from json import load
 db = Database()
 
 
+
 def start():
     print(f"""
 Hello, I'm smartish!
-/add - add new item to LS (Leitner system)
+
 Example:
-/add
-nameOfItem,linkToTheItem
+addPlus: item1 + item2 + item3...
 
-/addPlus - add new *items* to LS (Leitner system)
-Example:
-/addPlus
-item1 + item2 + item3...
+getToday - get what to repeat today
 
-/getToday - get what to repeat today
+makeShifts - shift all that you need to repeat today as you've repeated it
 
-/makeShifts - shift all that you need to repeat today as you've repeated it
-
-/temp - template
-
-/makeShiftsFrom
-12.10
+makeShiftsFrom: 12.10
 """)
 
 
@@ -65,8 +57,6 @@ def addPlus(args):
 
 def getToday():
     objs = db.getObjectsByDate(dt.date.today())
-    print(objs)
-    print(db.getAllObjectsOnLevel(1))
     info = '\n\n\n'.join(sorted(map(str, objs), reverse=True))
     if not info:
         print("Good news: Nothing new today!")
