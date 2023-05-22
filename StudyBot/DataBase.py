@@ -26,6 +26,14 @@ class Database:
     def deleteByName(self, name, level):
         self._cursor.execute(f"DELETE FROM level{level} WHERE objName=(?)", (name,))
 
+    # def getObjectByNameAndDate(self, name, date):
+    #     for level in range(INFO['LEVELS_AMOUNT']):
+    #         objs = self.getObjectsByDateAndLevel(date, level)
+    #         for obj in objs:
+    #             if obj.name == name:
+    #                 return obj
+    #     return None
+
     def getObjectsByDateAndLevel(self, date, level):
         self._cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
         return [Object.fromTuple(triple) for triple in self._cursor.fetchall()]

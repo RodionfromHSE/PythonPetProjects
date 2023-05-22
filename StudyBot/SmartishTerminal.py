@@ -25,24 +25,22 @@ makeShiftsFrom: 12.10
 """)
 
 
-def add(args):
-    try:
-        splitMsg = args[0].split(',')
 
-        obj = Object(*splitMsg, dt.date.today())
+def reformatArgs(args):
+    """
+    Convert arguments from ['arg1', 'arg2', 'arg3'] to ['arg1 YesterdayDate', 'arg2 YesterdayDate', 'arg3 YesterdayDate']
+    :param args: list of strings
+    :return: list of strings
+    """
+    yesterday = dt.date.today() - dt.timedelta(days=1)
+    yesterday = yesterday.strftime("%d.%m")
+    return [f"{arg} {yesterday}" for arg in args]
 
-        db.addObject(obj, INFO['INITIAL_LEVEL'])
-        db.saveChanges()
-
-        print(f"Hey! It's added successfully. \n{obj}")
-    except Exception as e:
-        print(f"Sorry, args format is incorrect:\n{e}")
-
-
-def addPlus(args):
+def addPlus(args, reformat=True):
     try:
         names = args[0].split(' + ')
-
+        if reformat:
+            names = reformatArgs(names)
         addedObjs = list()
         for name in names:
             obj = Object(name=name, repDate=dt.date.today())
@@ -50,9 +48,23 @@ def addPlus(args):
             addedObjs.append(obj)
 
         db.saveChanges()
-        print(f"Hey! It's added successfully. \n{addedObjs}")
+        print(f"Hey! It's added successfully. \n")
+        for obj in addedObjs:
+            print(obj)
     except Exception as e:
         print(f"Sorry, args format is incorrect:\n{e}")
+
+# def push(args):
+#     try:
+#         args = args.strip()
+#         if len(args.)
+#         obj = Object(name=name, repDate=dt.date.today())
+#         db.addObject(obj, INFO['INITIAL_LEVEL'])
+#         db.saveChanges()
+#         print(f"Hey! It's added successfully. \n")
+#         print(obj)
+#     except Exception as e:
+#         print(f"Sorry, args format is incorrect:\n{e}"
 
 
 def getToday():
@@ -132,7 +144,7 @@ def handle_input(input_str):
     if command == "start":
         start()
     elif command == "add":
-        add(args)
+        addPlus(args, reformat=False)
     elif command == "addPlus":
         addPlus(args)
     elif command == "getToday":
@@ -145,6 +157,10 @@ def handle_input(input_str):
         view()
     elif command == "temp":
         temp()
+    elif command == "close":
+        close()
+    elif command == "start":
+        start()
     else:
         print("Invalid command")
 
