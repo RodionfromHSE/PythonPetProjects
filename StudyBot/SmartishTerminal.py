@@ -67,11 +67,17 @@ def addPlus(args, reformat=True):
 #         print(f"Sorry, args format is incorrect:\n{e}"
 
 
-def getToday():
-    objs = db.getObjectsByDate(dt.date.today())
+def getToday(args=None):
+    data = args[0] if args else None
+    if isinstance(data, str):
+        data = dt.datetime.strptime(data, "%d.%m").date()
+        data = data.replace(year=2023)
+    elif not data:
+        data = dt.date.today()
+    objs = db.getObjectsByDate(data)
     info = '\n\n\n'.join(sorted(map(str, objs), reverse=True))
     if not info:
-        print("Good news: Nothing new today!")
+        print("Good news: Nothing new for the selected day!")
     else:
         print(info)
 
@@ -148,7 +154,7 @@ def handle_input(input_str):
     elif command == "addPlus":
         addPlus(args)
     elif command == "getToday":
-        getToday()
+        getToday(args)
     elif command == "makeShifts":
         makeShifts()
     elif command == "makeShiftsFrom":
