@@ -1,8 +1,10 @@
 import sqlite3 as sq
 from Data import *
 import sys
+import omegaconf
+from ArgParser import conf
 
-DB_NAME = "C:\\Users\\rodio\\Programming\\Python\\PythonPetProjects\\StudyBot\\leitner_base.db"
+DB_NAME = conf.db.path
 def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)):
         yield start_date + dt.timedelta(n)
@@ -23,8 +25,18 @@ class Database:
         self._cursor.execute(
             f"""INSERT INTO level{level} VALUES('{object.name}', '{object.link}', '{object.repDate}')""")
 
-    def deleteByName(self, name, level):
-        self._cursor.execute(f"DELETE FROM level{level} WHERE objName=(?)", (name,))
+    def deleteByNameAndLevel(self, name, level):
+        # select ignore case 
+        # self._cursor.execute(f"SELECT * FROM level{level} WHERE objName=(?)", (name,)) # case sensitive
+        self._cursor.execute(f"SELECT * FROM level{level} WHERE objName=(?) COLLATE NOCASE", (name,)) # case insensitive
+        objs = [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
+        if objs:
+            print(f"Found {len(objs)} objects with name {name} on level {level}")
+            self._cursor.execute(f"DELETE FROM level{level} WHERE objName=(?) COLLATE NOCASE", (name,))
+        
+    def deleteByName(self, name):
+        for i in range(INFO['LEVELS_AMOUNT']):
+            self.deleteByNameAndLevel(name, i)
 
     # def getObjectByNameAndDate(self, name, date):
     #     for level in range(INFO['LEVELS_AMOUNT']):

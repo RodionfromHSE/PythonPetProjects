@@ -67,7 +67,7 @@ def addPlus(args, reformat=True):
 #         print(f"Sorry, args format is incorrect:\n{e}"
 
 
-def getToday(args=None):
+def get(args=None):
     data = args[0] if args else None
     if isinstance(data, str):
         data = dt.datetime.strptime(data, "%d.%m").date()
@@ -80,6 +80,15 @@ def getToday(args=None):
         print("Good news: Nothing new for the selected day!")
     else:
         print(info)
+
+def remove(args):
+    try:
+        name = args[0].strip()
+        db.deleteByName(name)
+        db.saveChanges()
+        print(f"Hey! It's removed successfully.")
+    except Exception as e:
+        print(f"Sorry, args format is incorrect:\n{e}")
 
 
 def makeShifts():
@@ -154,13 +163,17 @@ def handle_input(input_str):
     elif command == "addPlus":
         addPlus(args)
     elif command == "getToday":
-        getToday(args)
+        get()
+    elif command == "get":
+        get(args)
     elif command == "makeShifts":
         makeShifts()
     elif command == "makeShiftsFrom":
         makeShiftsFrom(args)
     elif command == "view":
         view()
+    elif command == "remove":
+        remove(args)
     elif command == "temp":
         temp()
     elif command == "close":

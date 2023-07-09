@@ -10,14 +10,10 @@ from AnkiConnector import AnkiConnector
 
 
 class GlobalHandler:
-    def __init__(self, json_file="data.json"):
-        with open(json_file) as f:
-            self.data = json.load(f)
-        # pprint(self.data)
-
-        self.src_dir = self.data['src']['dir']
-        self.files = self.data['src']['files']
-        self.deck_labels = self.data['deckLabels']
+    def __init__(self, config):
+        self.src_dir = config['src']['dir']
+        self.files = config['src']['files']
+        self.deck_labels = config['deckLabels']
         # pprint(self.deck_labels)
 
         self.extractor = Extractor()
