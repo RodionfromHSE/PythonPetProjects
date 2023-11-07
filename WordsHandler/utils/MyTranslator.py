@@ -3,13 +3,10 @@ from deepl import Translator
 import time
 import random
 import os
-
-auth_key = os.environ.get('DEEPL_AUTH_KEY')
-assert auth_key is not None, "DEEPL_AUTH_KEY is not set"
-
+from omegaconf import OmegaConf
 
 class MyTranslator:
-    def __init__(self, src, dest, stop_count=40, time_range=(10, 16), batch_size=10):
+    def __init__(self, src, dest, auth_key, stop_count=40, time_range=(10, 16), batch_size=10):
         self.translator = Translator(auth_key=auth_key)
         self.src = src
         self.dest = dest

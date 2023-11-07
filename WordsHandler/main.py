@@ -1,4 +1,5 @@
-from GlobalHandler import GlobalHandler
+#! /opt/homebrew/bin python3
+from utils import GlobalHandler
 import os
 from omegaconf import OmegaConf
 import argparse
@@ -14,10 +15,13 @@ def parse_args():
     parser.add_argument("--config", type=str, default=os.path.join(cur_folder, "config.yaml"), help="Path to config file")
     return parser.parse_args()
 
-if __name__ == '__main__':
+def main():
     args = parse_args()
     config = read_config(args.config)
     handler = GlobalHandler(config)
     handler.extract_and_add()
     if input("Clear? (y/n)") == 'y':
         handler.clear()
+
+if __name__ == '__main__':
+    main()   

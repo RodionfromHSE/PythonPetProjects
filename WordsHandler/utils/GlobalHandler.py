@@ -4,7 +4,7 @@ from warnings import warn
 from pprint import pprint
 
 from Extractor import Extractor
-from MyTranslator import MyTranslator
+from translator.helpers import get_translator
 from AnkiConnector import AnkiConnector
 
 
@@ -14,7 +14,6 @@ class GlobalHandler:
         self.src_dir = config['src']['dir']
         self.files = config['src']['files']
         self.deck_labels = config['deckLabels']
-        # pprint(self.deck_labels)
 
         self.extractor = Extractor()
         self.connector = AnkiConnector()
@@ -25,6 +24,7 @@ class GlobalHandler:
             try:
                 self.connector.create_deck(deck)
             except Exception:
+                print(f"Deck {deck!r} already exists")
                 pass
 
 
@@ -32,19 +32,17 @@ class GlobalHandler:
         tmp_file = "tmp.txt"
         for file in self.files:
             filename = os.sep.join([self.src_dir, file['name']])
+            translator = get_translator(file)
             
-            src_lang = file['src']
-            dest_lang = file['dest']
-            # TO-DO: Why do I init translator here? I should init it once and use it in loop
-            translator = MyTranslator(src_lang, dest_lang)
-            
-            src_words = self.extractor.extract_words(filename)
+            src_words = self.extractor.extract_words_from_file(filename)
             if not src_words:
                 warn(f"No words extracted from file '{filename}'")
                 continue
-            translator.translate_file(filename, tmp_file)
-            
-            dest_words = self.extractor.extract_words(tmp_file)
+            translated_text = translator.translate_file(filename)
+            print(translated_text)
+            dest_words = self.extractor.extract_words_from_text(translated_text)
+            print(dest_words)
+
             print(f"Translated file '{filename}', extracted words: {len(dest_words)}, original words: {len(src_words)}")
             if len(dest_words) != len(src_words):
                 print(f"Warning: number of words in file '{filename}' is different after translation")

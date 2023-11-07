@@ -67,11 +67,26 @@ def addPlus(args, reformat=True):
 #         print(f"Sorry, args format is incorrect:\n{e}"
 
 
+def getNotRepeated(daysRange=31):
+    objs = []
+    today = dt.date.today()
+    for date in range(daysRange):
+        date = today - dt.timedelta(days=date)
+        objs.extend(db.getObjectsByDate(date))
+    info = '\n\n\n'.join(sorted(map(str, objs), reverse=True))
+    if not info:
+        print(f"Good news: Nothing new for last {daysRange} days!")
+    else:
+        print(info)
+
+
 def get(args=None):
     data = args[0] if args else None
     if isinstance(data, str):
         data = dt.datetime.strptime(data, "%d.%m").date()
-        data = data.replace(year=2023)
+        # replace year to current year
+        cur_year = dt.date.today().year
+        data = data.replace(year=cur_year)
     elif not data:
         data = dt.date.today()
     objs = db.getObjectsByDate(data)
@@ -90,6 +105,12 @@ def remove(args):
     except Exception as e:
         print(f"Sorry, args format is incorrect:\n{e}")
 
+def makeShiftsNotRepeated(daysRange=31):
+    start_date = dt.date.today() - dt.timedelta(days=daysRange)
+    end_date = dt.date.today() + dt.timedelta(days=1)
+    db.makeShiftsRange(start_date, end_date)
+    db.saveChanges()
+    print(f"Hey! It's shifted successfully.")
 
 def makeShifts():
     db.makeShifts()
@@ -102,7 +123,7 @@ def makeShiftsFrom(args):
         date_str = args[0].strip()
         start_date = dt.datetime.strptime(date_str, "%d.%m")
         start_date = start_date.replace(year=2023).date()
-        db.makeShiftsFrom(start_date)
+        db.makeShiftsRange(start_date)
         db.saveChanges()
         print(f"Hey! It's shifted successfully.")
     except Exception as e:
@@ -166,10 +187,14 @@ def handle_input(input_str):
         get()
     elif command == "get":
         get(args)
+    elif command == "getAll":
+        getNotRepeated()
     elif command == "makeShifts":
         makeShifts()
     elif command == "makeShiftsFrom":
         makeShiftsFrom(args)
+    elif command == "makeShiftsAll":
+        makeShiftsNotRepeated()
     elif command == "view":
         view()
     elif command == "remove":

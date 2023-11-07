@@ -75,10 +75,7 @@ class AnkiConnector:
         return result["result"]
 
 
-
-
-
-if __name__ == '__main__':
+def main():
     anki = AnkiConnector()
     anki.create_deck("German")
     try:
@@ -87,3 +84,7 @@ if __name__ == '__main__':
     except Exception as e:
         if str(e).strip() == "cannot create note because it is a duplicate":
             warn(f"Card duplicate")
+
+
+if __name__ == '__main__':
+    main()    

@@ -71,9 +71,8 @@ class Database:
                 obj.shiftDate(INFO['SHIFTS'][level])
                 self.addObject(obj, level + 1)
 
-    def makeShiftsFrom(self, start_date):
-        today = dt.date.today()
-        for day in daterange(start_date, today):
+    def makeShiftsRange(self, start_date, end_date=dt.date.today()):
+        for day in daterange(start_date, end_date):
             self.makeShifts(day)
 
     def getAllObjectsOnLevel(self, level):

@@ -10,6 +10,13 @@
 2. Download Anki-connect with instruction [here](https://ankiweb.net/shared/info/2055492159)
 3. Fill files with sentences and add them to data.json
 
+## Issues
+
+1. Deep Translators library has bug in implementation of Yandex translator `translate` method.
+To fix it change return statement from `return response["text"]` to `return response["text"][0]` in file `$DIRECTORY/deep_translator/yandex.py`
+
+You can find the needed directory by using command `pip show deep-translator`
+
 
 ## Future features
 1. Definition + example sentence for all highlighted words
