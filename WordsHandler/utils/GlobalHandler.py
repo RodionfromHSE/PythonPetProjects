@@ -39,22 +39,20 @@ class GlobalHandler:
                 warn(f"No words extracted from file '{filename}'")
                 continue
             translated_text = translator.translate_file(filename)
-            print(translated_text)
+            # print(translated_text)
             dest_words = self.extractor.extract_words_from_text(translated_text)
-            print(dest_words)
+            # print(dest_words)
 
             print(f"Translated file '{filename}', extracted words: {len(dest_words)}, original words: {len(src_words)}")
             if len(dest_words) != len(src_words):
                 print(f"Warning: number of words in file '{filename}' is different after translation")
+                print(f"Original words: {src_words}")
+                print(f"Translated words: {dest_words}")
 
             deck_label = self.deck_labels[file['deckLabel']]
             
-            # print(f"Extracting words from file '{filename}', src_lang='{src_lang}', dest_lang='{dest_lang}', deck_label='{deck_label}'")
-            # print(f"Words: {words}")
-            # print(f"Translations: {translations}")
 
             for word, translation in zip(src_words, dest_words):
-                # print(f"Adding word '{word}' with translation '{translation}' to deck '{deck_label}'")
                 try:
                     self.connector.add_flashcard(deck_label, word, translation)
                     self.connector.add_flashcard(deck_label, translation, word)
@@ -65,7 +63,6 @@ class GlobalHandler:
                     else:
                         print(f"Error adding card {word}|{translation}, {e}")
                         raise e
-                # print(f"Added word '{word}' with translation '{translation}' to deck '{deck_label}'")
     
     def clear(self):
         for file in self.files:
