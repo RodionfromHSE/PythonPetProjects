@@ -17,6 +17,7 @@ To fix it change return statement from `return response["text"]` to `return resp
 
 You can find the needed directory by using command `pip show deep-translator`
 
+2. While translating the files is fast, adding them to Anki is slow. I need to add some kind of progress bar and coroutines to speed up the process.
 
 ## Future features
 1. Definition + example sentence for all highlighted words

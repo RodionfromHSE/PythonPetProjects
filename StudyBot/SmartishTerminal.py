@@ -169,8 +169,10 @@ Ch:
 
 
 def close():
+    global db
     print("Have a nice day!")
-    sys.exit()
+    del db
+    sys.exit(0)
 
 
 

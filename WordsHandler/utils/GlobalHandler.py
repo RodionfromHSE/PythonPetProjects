@@ -29,7 +29,6 @@ class GlobalHandler:
 
 
     def extract_and_add(self):
-        tmp_file = "tmp.txt"
         for file in self.files:
             filename = os.sep.join([self.src_dir, file['name']])
             translator = get_translator(file)
