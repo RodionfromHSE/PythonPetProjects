@@ -2,6 +2,7 @@ import json
 import os
 from warnings import warn
 from pprint import pprint
+from tqdm import tqdm
 
 from Extractor import Extractor
 from translator.helpers import get_translator
@@ -51,7 +52,7 @@ class GlobalHandler:
             deck_label = self.deck_labels[file['deckLabel']]
             
 
-            for word, translation in zip(src_words, dest_words):
+            for word, translation in tqdm(zip(src_words, dest_words), total=len(src_words), desc=f"Adding cards from file '{filename}'"):
                 try:
                     self.connector.add_flashcard(deck_label, word, translation)
                     self.connector.add_flashcard(deck_label, translation, word)

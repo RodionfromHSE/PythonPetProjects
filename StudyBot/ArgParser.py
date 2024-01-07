@@ -1,9 +1,12 @@
 import argparse
 import omegaconf
+import os
+
+_CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', type=str, default='config.yaml')
+    parser.add_argument('--config', type=str, default=os.path.join(_CUR_DIR, 'config.yaml'))
     args = parser.parse_args()
     return args
 
