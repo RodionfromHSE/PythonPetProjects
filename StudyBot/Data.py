@@ -18,8 +18,9 @@ class Object:
         self.repDate = repDate
         self.link = link
 
-    def shiftDate(self, days):
-        self.repDate = dt.date.today() + dt.timedelta(days=days)
+    def shiftDate(self, days, use_self_date=True):
+        start_day = self.repDate if use_self_date else dt.date.today()
+        self.repDate = start_day + dt.timedelta(days=days)
 
     def fromTuple(triple):
         assert len(triple) == 3

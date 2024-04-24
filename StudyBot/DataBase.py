@@ -62,18 +62,21 @@ class Database:
             objs += self.getObjectsByDateAndLevel(date, i)
         return objs
 
-    def makeShifts(self, day=dt.date.today()):
+    def makeShifts(self, day=dt.date.today(), from_today=False):
+        use_self_date = not from_today
         for level in range(INFO['LEVELS_AMOUNT']):
             objs = self.extractObjectsByDateAndLevel(day, level)
             if level == INFO['LEVELS_AMOUNT'] - 1:
                 break
             for obj in objs:
-                obj.shiftDate(INFO['SHIFTS'][level])
+                if not from_today:
+                    day = obj.repDate
+                obj.shiftDate(INFO['SHIFTS'][level], use_self_date)
                 self.addObject(obj, level + 1)
 
-    def makeShiftsRange(self, start_date, end_date=dt.date.today()):
+    def makeShiftsRange(self, start_date, end_date=dt.date.today(), from_today=False):
         for day in daterange(start_date, end_date):
-            self.makeShifts(day)
+            self.makeShifts(day, from_today)
 
     def getAllObjectsOnLevel(self, level):
         self._cursor.execute(f"""SELECT * FROM level{level}""")

@@ -105,10 +105,14 @@ def remove(args):
     except Exception as e:
         print(f"Sorry, args format is incorrect:\n{e}")
 
-def makeShiftsNotRepeated(daysRange=31):
+def makeShiftsNotRepeated(daysRange=31, from_today=False):
+    """Shift all not repeated objects from the last daysRange days.
+    If from_today is True, then shift them as if they were repeated today.
+    Otherwise, shift them as if they were repeated on the day they should be repeated.
+    """
     start_date = dt.date.today() - dt.timedelta(days=daysRange)
     end_date = dt.date.today() + dt.timedelta(days=1)
-    db.makeShiftsRange(start_date, end_date)
+    db.makeShiftsRange(start_date, end_date, from_today=from_today)
     db.saveChanges()
     print(f"Hey! It's shifted successfully.")
 
@@ -197,6 +201,8 @@ def handle_input(input_str):
         makeShiftsFrom(args)
     elif command == "makeShiftsAll":
         makeShiftsNotRepeated()
+    elif command == "makeShiftsAllFromToday":
+        makeShiftsNotRepeated(from_today=True)
     elif command == "view":
         view()
     elif command == "remove":
