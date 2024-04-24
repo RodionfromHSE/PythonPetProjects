@@ -1,36 +1,36 @@
 src:
   dir: /Users/Rodion.Khvorostov/Desktop/Data/LanguageStudyData
   files:
-    # - name: EnglishToRussian.txt
-    #   deckLabel: en
-    #   src: en
-    #   dest: ru
-    #   translator: yandex
-    # - name: RussianToEnglish.txt
-    #   deckLabel: ru
-    #   src: ru
-    #   dest: en
-    #   translator: yandex
-    # - name: GermanToEnglish.txt
-    #   deckLabel: de
-    #   src: de
-    #   dest: ru
-    #   translator: deepl
-    # - name: EnglishToGerman.txt
-    #   deckLabel: ru
-    #   src: ru
-    #   dest: de
-    #   translator: deepl
-    - name: TestYandex.txt
-      deckLabel: test
+    - name: EnglishToRussian.txt
+      deckLabel: en
       src: en
       dest: ru
       translator: yandex
-    - name: TestDeepl.txt
-      deckLabel: test
+    - name: RussianToEnglish.txt
+      deckLabel: en
+      src: ru
+      dest: en
+      translator: yandex
+    - name: GermanToEnglish.txt
+      deckLabel: de
+      src: de
+      dest: en
+      translator: deepl
+    - name: EnglishToGerman.txt
+      deckLabel: de
       src: en
       dest: de
       translator: deepl
+    # - name: TestYandex.txt
+    #   deckLabel: test
+    #   src: en
+    #   dest: ru
+    #   translator: yandex
+    # - name: TestDeepl.txt
+    #   deckLabel: test
+    #   src: en
+    #   dest: de
+    #   translator: deepl
 
 
 deckLabels:

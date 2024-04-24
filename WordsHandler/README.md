@@ -1,7 +1,7 @@
 # Anki Translator
 
 > This app allows you to automize process of creation Anki decks.
-> All that you need to create list of sentences you want to learn
+> All that you need is to create list of sentences you want to learn
 > and, woolya, you have this sentences translated in your Anki app
 
 
