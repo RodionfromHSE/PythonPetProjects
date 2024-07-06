@@ -1,4 +1,5 @@
 import sys
+import os
 
 from Data import Object
 from DataBase import Database
@@ -7,23 +8,7 @@ from Data import INFO
 from json import load
 
 db = Database()
-
-
-
-def start():
-    print(f"""
-Hello, I'm smartish!
-
-Example:
-addPlus: item1 + item2 + item3...
-
-getToday - get what to repeat today
-
-makeShifts - shift all that you need to repeat today as you've repeated it
-
-makeShiftsFrom: 12.10
-""")
-
+FREEZE_META_PATH = os.path.join(os.path.dirname(__file__), 'freeze_meta.json')
 
 
 def reformatArgs(args):
@@ -53,18 +38,6 @@ def addPlus(args, reformat=True):
             print(obj)
     except Exception as e:
         print(f"Sorry, args format is incorrect:\n{e}")
-
-# def push(args):
-#     try:
-#         args = args.strip()
-#         if len(args.)
-#         obj = Object(name=name, repDate=dt.date.today())
-#         db.addObject(obj, INFO['INITIAL_LEVEL'])
-#         db.saveChanges()
-#         print(f"Hey! It's added successfully. \n")
-#         print(obj)
-#     except Exception as e:
-#         print(f"Sorry, args format is incorrect:\n{e}"
 
 
 def getNotRepeated(daysRange=31):
@@ -143,33 +116,30 @@ def view():
 
     print(view_str)
 
+def freeze():
+    """Freeze the current state of the database. Save date of the freeze."""
+    today = dt.date.today()
+    meta = today.strftime("%d.%m.%Y")
+    with open(FREEZE_META_PATH, 'w') as f:
+        f.write(meta)
+    
+    print(f"Database is frozen on {today}")
 
-def temp():
-    print("""En:    
-
-Deutsch:   
-
-*:   
-
-OS:   
-
-MA:    
-
-ML:     
-
-Kt:     
-
-FP:   
-
-SQL:    
-
-MS:     
-
-AC:
-
-Ch:
-
-""")
+def unfreeze():
+    """Unfreeze the database. Load the date of the freeze, shift all objects from that date to today, clear the freeze date."""
+    if not os.path.exists(FREEZE_META_PATH):
+        print("Database is not frozen.")
+        return
+    
+    with open(FREEZE_META_PATH, 'r') as f:
+        meta = f.read().strip()
+    os.remove(FREEZE_META_PATH)
+    
+    freeze_date = dt.datetime.strptime(meta, "%d.%m.%Y").date()
+    today = dt.date.today()
+    n_days_passed = (today - freeze_date).days
+    print(f"Database is unfrozen. {n_days_passed} days passed since the freeze date ({freeze_date}).")
+    db.calenderShift(n_days_passed)
 
 
 def close():
@@ -183,9 +153,7 @@ def close():
 
 def handle_input(input_str):
     command, *args = input_str.split(': ')
-    if command == "start":
-        start()
-    elif command == "add":
+    if command == "add":
         addPlus(args, reformat=False)
     elif command == "addPlus":
         addPlus(args)
@@ -207,12 +175,12 @@ def handle_input(input_str):
         view()
     elif command == "remove":
         remove(args)
-    elif command == "temp":
-        temp()
     elif command == "close":
         close()
-    elif command == "start":
-        start()
+    elif command == "freeze":
+        freeze()
+    elif command == "unfreeze":
+        unfreeze()
     else:
         print("Invalid command")
 

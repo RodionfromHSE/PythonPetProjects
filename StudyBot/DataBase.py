@@ -38,14 +38,6 @@ class Database:
         for i in range(INFO['LEVELS_AMOUNT']):
             self.deleteByNameAndLevel(name, i)
 
-    # def getObjectByNameAndDate(self, name, date):
-    #     for level in range(INFO['LEVELS_AMOUNT']):
-    #         objs = self.getObjectsByDateAndLevel(date, level)
-    #         for obj in objs:
-    #             if obj.name == name:
-    #                 return obj
-    #     return None
-
     def getObjectsByDateAndLevel(self, date, level):
         self._cursor.execute(f"""SELECT * FROM level{level} WHERE date = '{date}'""")
         return [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
@@ -81,6 +73,19 @@ class Database:
     def getAllObjectsOnLevel(self, level):
         self._cursor.execute(f"""SELECT * FROM level{level}""")
         return [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
+    
+    def extractAllObjectsOnLevel(self, level):
+        self._cursor.execute(f"""SELECT * FROM level{level}""")
+        objs = [Object.fromTuple(triple) for triple in self._cursor.fetchall()]
+        self._cursor.execute(f"DELETE FROM level{level}")
+        return objs
+    
+    def calenderShift(self, n_days):
+        for level in range(INFO['LEVELS_AMOUNT']):
+            objs = self.extractAllObjectsOnLevel(level)
+            for obj in objs:
+                obj.shiftDate(n_days)
+                self.addObject(obj, level)
 
     def saveChanges(self):
         self._con.commit()
