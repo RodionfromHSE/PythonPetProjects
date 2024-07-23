@@ -10,6 +10,13 @@
 2. Download Anki-connect with instruction [here](https://ankiweb.net/shared/info/2055492159)
 3. Fill files with sentences and add them to data.json
 
+## "Show in the dictionary" (for Windows users)
+
+* Download the `1287554547` extension.
+* Go to the `C:\Users\%USERNAME%\AppData\Roaming\Anki2\addons21\1287554547` directory.
+* Change the init.py file to the `dictionary_addon.py` file.
+
+
 ## Issues
 
 1. Deep Translators library has bug in implementation of Yandex translator `translate` method.
