@@ -1,6 +1,8 @@
 #!/bin/bash
 
+STUDY_BOT_DIR="/Users/Rodion.Khvorostov/Desktop/Prog/Other/pet_projects/StudyBot"
+
 echo "Starting Leitner System..."
-/usr/bin/python3 /Users/user010/Desktop/Programming/Python/PythonPetProjects/StudyBot/SmartishTerminal.py \
-    --config /Users/user010/Desktop/Programming/Python/PythonPetProjects/StudyBot/config.yaml 
+python3 $STUDY_BOT_DIR/SmartishTerminal.py \
+    --config $STUDY_BOT_DIR/config.yaml
 echo "Leitner System Finished."
