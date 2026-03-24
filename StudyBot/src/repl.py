@@ -19,8 +19,7 @@ class StudyBotRepl:
         self._commands: dict[str, tuple[str, callable]] = {
             "addPlus": ("Add items (yesterday date appended)", self._add_plus),
             "add": ("Add items [optional date: dd.mm]", self._add),
-            "getToday": ("Today's cards", self._get_today),
-            "get": ("Cards for a date (dd.mm)", self._get),
+            "get": ("Today's cards [optional: dd.mm]", self._get),
             "getAll": ("Unrepeated cards (last 31 days)", self._get_all),
             "makeShifts": ("Shift today's cards", self._make_shifts),
             "makeShiftsFrom": ("Shift from a date (dd.mm)", self._make_shifts_from),
@@ -103,16 +102,13 @@ class StudyBotRepl:
         for c in cards:
             self._console.print(f"  {c}")
 
-    def _get_today(self, _args: str | None) -> None:
-        cards = self._svc.get_today()
-        self._print_cards(cards, "Nothing to repeat today!")
-
     def _get(self, args: str | None) -> None:
-        if not args:
-            self._error("Usage: get: dd.mm")
-            return
-        cards = self._svc.get_by_date(args)
-        self._print_cards(cards, "No cards for that date.")
+        if args:
+            cards = self._svc.get_by_date(args)
+            self._print_cards(cards, "No cards for that date.")
+        else:
+            cards = self._svc.get_today()
+            self._print_cards(cards, "Nothing to repeat today!")
 
     def _get_all(self, _args: str | None) -> None:
         cards = self._svc.get_not_repeated()
