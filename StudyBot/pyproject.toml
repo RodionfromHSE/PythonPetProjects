@@ -1,0 +1,10 @@
+[project]
+name = "study-bot"
+version = "0.1.0"
+description = "Leitner system study bot"
+requires-python = ">=3.12"
+dependencies = [
+    "rich",
+    "prompt-toolkit",
+    "boilerplate-tools @ git+https://github.com/RodionfromHSE/custom_python_tools.git#subdirectory=boilerplate_tools",
+]

@@ -1,13 +1,42 @@
-# Config
+# StudyBot — Leitner System
 
-## Steps
+A terminal-based spaced repetition tool using the Leitner box algorithm.
 
-### 1. Script
+## Setup
 
-1. Point to absolute path of config.yaml file in leitner.sh
-    * Hint: just change `STUDY_BOT_DIR` variable in leitner.sh
-2. Copy leitner.sh to /usr/local/bin/leitner.sh
+```bash
+# install dependencies
+cd StudyBot && uv sync
 
-### 2. Config.yaml
+# update db path in config.yaml
+```
 
-1. Change the path to the database
+## Usage
+
+```bash
+# run directly
+uv run python main.py
+
+# or via launch script (can be symlinked to /usr/local/bin)
+./launch_scripts/leitner.sh
+
+# symlink example
+ln -s "$(pwd)/launch_scripts/leitner.sh" /usr/local/bin/leitner
+```
+
+## Commands
+
+| Command | Example | Description |
+|---------|---------|-------------|
+| `addPlus` | `addPlus: A + B + C` | Add items with yesterday's date appended |
+| `add` | `add: A + B: 15.03` | Add items with explicit date (optional) |
+| `getToday` | `getToday` | Show today's cards |
+| `get` | `get: 15.03` | Show cards for a date |
+| `getAll` | `getAll` | Unrepeated cards (last 31 days) |
+| `makeShifts` | `makeShifts` | Shift today's cards to next level |
+| `makeShiftsFrom` | `makeShiftsFrom: 01.03` | Shift from a specific date |
+| `makeShiftsAll` | `makeShiftsAll` | Shift all unrepeated |
+| `view` | `view` | View all levels |
+| `remove` | `remove: name` | Remove card by name |
+| `freeze` / `unfreeze` | `freeze` | Pause/resume scheduling |
+| `close` | `close` | Exit |
