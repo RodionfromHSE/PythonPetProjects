@@ -69,6 +69,11 @@ class LeitnerService:
         self._repo.commit()
         return count
 
+    def postpone(self, name: str, days: int) -> int:
+        count = self._repo.postpone(name, days)
+        self._repo.commit()
+        return count
+
     def freeze(self) -> date:
         today = date.today()
         self._repo.set_meta("freeze_date", today.isoformat())

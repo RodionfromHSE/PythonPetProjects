@@ -137,3 +137,7 @@ Work/
 
 # All json
 *.json
+
+# StudyBot
+
+.leitner_history

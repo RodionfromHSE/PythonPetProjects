@@ -70,6 +70,25 @@ class CardRepository:
                 total += count
         return total
 
+    def postpone(self, name: str, days: int) -> int:
+        """Shift each card matching name forward by `days`, keeping its level."""
+        total = 0
+        for level in range(self._config.levels):
+            self._cur.execute(
+                f"SELECT rowid, date FROM level{level} "
+                "WHERE objName = ? COLLATE NOCASE",
+                (name,),
+            )
+            rows = self._cur.fetchall()
+            for rowid, date_str in rows:
+                new_date = date.fromisoformat(date_str) + timedelta(days=days)
+                self._cur.execute(
+                    f"UPDATE level{level} SET date = ? WHERE rowid = ?",
+                    (str(new_date), rowid),
+                )
+                total += 1
+        return total
+
     def get_all_on_level(self, level: int) -> list[Card]:
         self._cur.execute(f"SELECT * FROM level{level}")
         return [Card.from_row(row) for row in self._cur.fetchall()]

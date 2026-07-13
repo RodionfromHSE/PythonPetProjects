@@ -27,6 +27,7 @@ class StudyBotRepl:
             "makeShiftsAllFromToday": ("Shift all as if today", self._make_shifts_all_today),
             "view": ("View all levels", self._view),
             "remove": ("Remove by name", self._remove),
+            "postpone": ("Postpone a card by N days (same level)", self._postpone),
             "freeze": ("Freeze scheduling", self._freeze),
             "unfreeze": ("Resume scheduling", self._unfreeze),
             "help": ("Show this help", self._help),
@@ -152,6 +153,22 @@ class StudyBotRepl:
             self._success(f"Removed {count} card(s) named '{args.strip()}'")
         else:
             self._error(f"No cards found with name '{args.strip()}'")
+
+    def _postpone(self, args: str | None) -> None:
+        usage = "Usage: postpone: <name>, <days>"
+        if not args or "," not in args:
+            self._error(usage)
+            return
+        name, days_str = (p.strip() for p in args.rsplit(",", maxsplit=1))
+        if not name:
+            self._error(usage)
+            return
+        days = int(days_str)
+        count = self._svc.postpone(name, days)
+        if count:
+            self._success(f"Postponed {count} card(s) by {days} day(s)")
+        else:
+            self._error(f"No cards found: '{name}'")
 
     def _freeze(self, _args: str | None) -> None:
         d = self._svc.freeze()
